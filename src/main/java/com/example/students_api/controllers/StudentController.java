@@ -6,8 +6,9 @@ import com.example.students_api.services.StudentService;
 import com.example.students_api.utils.Sex;
 import com.example.students_api.utils.Status;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -19,24 +20,24 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping("students")
-    public String getAll() {
-        return studentService.getAllStudents();
+    public ResponseEntity<?> getAll() {
+        return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
     }
 
     @GetMapping("students/{id}")
-    public String getById(@PathVariable Long id) {
-        return studentService.getStudentById(id);
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(studentService.getStudentById(id), HttpStatus.OK);
     }
 
     @GetMapping("filter")
-    public String getFiltered(@RequestParam(required = false) String firstname,
-                              @RequestParam(required = false) String surname,
-                              @RequestParam(required = false) String patronymic,
-                              @RequestParam(required = false) String group_name,
-                              @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate birthDate,
-                              @RequestParam(required = false) Sex sex,
-                              @RequestParam(required = false) Status status,
-                              @RequestParam(required = false) Integer course) {
+    public ResponseEntity<?> getFiltered(@RequestParam(required = false) String firstname,
+                                         @RequestParam(required = false) String surname,
+                                         @RequestParam(required = false) String patronymic,
+                                         @RequestParam(required = false) String group_name,
+                                         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate birthDate,
+                                         @RequestParam(required = false) Sex sex,
+                                         @RequestParam(required = false) Status status,
+                                         @RequestParam(required = false) Integer course) {
 
         var student = StudentDto.builder()
                 .firstname(firstname)
@@ -48,39 +49,37 @@ public class StudentController {
                 .status(status)
                 .course(course)
                 .build();
-        return studentService.getStudentsByExample(student);
+        return new ResponseEntity<>(studentService.getStudentsByExample(student), HttpStatus.OK);
     }
 
     @GetMapping("date")
-    public String getFromTimeInterval(@RequestParam
-                                      @DateTimeFormat(pattern = "yyyy-MM-dd")
-                                      LocalDate from,
-                                      @RequestParam
-                                      @DateTimeFormat(pattern = "yyyy-MM-dd")
-                                      LocalDate to) {
-        return studentService.getStudentsByTimeInterval(from, to);
+    public ResponseEntity<?> getFromTimeInterval(@RequestParam
+                                                 @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                                 LocalDate from,
+                                                 @RequestParam
+                                                 @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                                 LocalDate to) {
+        return new ResponseEntity<>(studentService.getStudentsByTimeInterval(from, to), HttpStatus.OK);
     }
 
     @GetMapping("groups/{group_name}")
-    public String getStudentsByGroupName(@PathVariable String group_name) {
-        if (group_name == null) {
-            return getAll();
-        }
-        return studentService.getStudentsByGroup(group_name);
+    public ResponseEntity<?> getStudentsByGroupName(@PathVariable String group_name) {
+        return new ResponseEntity<>(studentService.getStudentsByGroup(group_name), HttpStatus.OK);
     }
 
     @PostMapping("create")
-    public String post(@RequestBody StudentDto student) {
-        return studentService.addStudent(student);
+    public ResponseEntity<?> post(@RequestBody StudentDto student) {
+        return new ResponseEntity<>(studentService.addStudent(student), HttpStatus.CREATED);
     }
 
     @PutMapping("update")
-    public String put(Student student) {
-        return studentService.putStudent(student);
+    public ResponseEntity<?> put(Student student) {
+        return new ResponseEntity<>(studentService.putStudent(student), HttpStatus.OK);
     }
 
-    @DeleteMapping("delete")
-    public void delete(@RequestParam Long id) {
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         studentService.deleteStudentById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

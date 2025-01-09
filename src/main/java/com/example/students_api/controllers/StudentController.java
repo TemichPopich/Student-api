@@ -5,6 +5,7 @@ import com.example.students_api.models.Student;
 import com.example.students_api.services.StudentService;
 import com.example.students_api.utils.Sex;
 import com.example.students_api.utils.Status;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping("api")
 @RequiredArgsConstructor
+@Tag(name = "Main REST controller")
 public class StudentController {
     private final StudentService studentService;
 
@@ -83,3 +85,5 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
+
+

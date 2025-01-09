@@ -52,6 +52,9 @@ public class StudentService {
         Example<Student> example = Example.of(getStudentFromDto(student));
         List<Student> students = studentRepo.findAll(example);
         List<StudentDto> studentsDto;
+        if (student.getBirthYear() != null) {
+            students = getStudentsByYear(students, student.getBirthYear());
+        }
         if (student.getCourse() != null) {
             studentsDto = getStudentsByCourse(students, student.getCourse());
         } else {
@@ -108,6 +111,10 @@ public class StudentService {
 
     public void deleteStudentById(Long id) {
         studentRepo.deleteById(id);
+    }
+
+    private List<Student> getStudentsByYear(List<Student> students, Integer birthYear) {
+        return students.stream().filter(student -> student.getBirthDate().getYear() == birthYear).toList();
     }
 
     private List<StudentDto> getStudentsByCourse(List<Student> students, int course) {

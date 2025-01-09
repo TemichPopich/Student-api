@@ -39,7 +39,8 @@ public class StudentController {
                                          @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate birthDate,
                                          @RequestParam(required = false) Sex sex,
                                          @RequestParam(required = false) Status status,
-                                         @RequestParam(required = false) Integer course) {
+                                         @RequestParam(required = false) Integer course,
+                                         @RequestParam(required = false) Integer birthYear) {
 
         var student = StudentDto.builder()
                 .firstname(firstname)
@@ -50,6 +51,7 @@ public class StudentController {
                 .sex(sex)
                 .status(status)
                 .course(course)
+                .birthYear(birthYear)
                 .build();
         return new ResponseEntity<>(studentService.getStudentsByExample(student), HttpStatus.OK);
     }

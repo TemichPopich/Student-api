@@ -3,6 +3,7 @@ package com.example.students_api.dto;
 import com.example.students_api.utils.Sex;
 import com.example.students_api.utils.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -28,4 +29,6 @@ public class StudentDto {
     private Sex sex;
     private Status status;
     private Integer course;
+    @JsonIgnore
+    private Integer birthYear;
 }
